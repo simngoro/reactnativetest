@@ -1,37 +1,40 @@
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  View
-} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SplashScreen from './components/splashScreen';
+import LoginScreen from './components/loginScreen';
+import HomeScreen from './components/homeScreen';
+import SignUpScreen from './components/signUpScreen';
 
-import {styles} from './styles'
+const Stack = createNativeStackNavigator();
 
-const App = () => {
-  const [text, setText] = useState('');
-  const [textList, setTextList] = useState([]);
+export default function App() {
+  const [userToken, setUserToken] = React.useState(null);
+
+  React.useEffect(() => {
+
+    setUserToken(null);
+  }, []);
+
   return (
-  <View style={styles.container}>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {userToken === null ? (
+          <Stack.Screen name="Splash" component={SplashScreen} />
+        ) : userToken ? (
+          <Stack.Screen name="Home" component={HomeScreen} />
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
-     <TextInput
-     placeholder='Type anything'
-     autoCorrect={true}
-     placeholderTextColor='#07103c'
-     editable={true}
-     value={text}
-     style={styles.textInput}
-     />
-     
-      <Button
-      title="Add"
-      color="#07103c"
-      onPress={() => null}
-       />
-  </View>
 
-    );
-};
 
-export default App;
+
+
